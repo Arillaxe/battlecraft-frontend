@@ -1,8 +1,8 @@
 import './play.sass';
 
 const Play = () => (
-  <div class="content-play">
-    <div class="title">Как начать играть</div>
+  <div className="content-play">
+    <div className="title">Как начать играть</div>
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla, quia.
       Eaque impedit nobis et numquam, error aut esse ipsum sed velit ad veniam

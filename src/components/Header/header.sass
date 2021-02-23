@@ -1,78 +1,40 @@
 header
   background: #fff
-  .row
-    height: 95px
-  .logo,
-  .menu
-    display: flex
-    align-items: center
-    justify-content: center
   .logo
-    padding-bottom: 19px
-    img
-      max-height: 68px
-  .menu
-    .nav_menu
-      display: flex
-  .user_block
-    display: flex
-    align-items: center
-    .btn_login
-      width: 100%
-      line-height: 50px
-      text-align: center
-      font-size: 14px
-      font-weight: bold
-      border-radius: 5px
-      background-color: var(--yellow)
-      transition: .6s all
-      &:hover
-        box-shadow: 10px 10px 73px -16px rgba(255,158,0,0.97)
-  .mobile_logo
-    display: none
-    img
-      max-height: 68px
-      margin: 5px 0 22px
-  .btn_aside
-    align-items: center
-    justify-content: flex-end
-    margin-left: auto
-    display: none
-  =mixin-media
-    @media (max-width: 1199.98px)
-      .logo,
-      .menu,
-      .user_block
-        display: none
-      .mobile_logo,
-      .btn_aside
-        display: flex
-  +mixin-media
-.nav_menu a,
-.sidebar a,
-    font-weight: bold
-    margin: 0 20px
-    text-transform: uppercase
-    font-size: 14px
+    max-height: 68px
+.navbar
+  .nav_link,
+  .nav_dropdown
     color: #9da9b5
-    &:hover,
-    &.nuxt-link-active
+    font-size: 14px
+    font-weight: bold
+    text-transform: uppercase
+    margin: 0 20px
+    &:hover
       color: #2e3338
-
-.menu_link
-  background-color: transparent !important
-  font-weight: bold !important
-  margin: 0 20px !important
-  text-transform: uppercase !important
-  font-size: 14px !important
-  color: #9da9b5 !important
-  border: none !important
-  padding: 0 !important
-  vertical-align: top !important
-  &:hover,
-    color: #2e3338 !important
-
-header
-  .dropdown-item
-    margin: 0
+  .nav_dropdown a
+    color: #9da9b5 !important
+    padding: 0 !important
+    margin-top: 2px
+    &:hover
+      color: #2e3338 !important
+  .btn_login
+    width: 100%
+    line-height: 50px
     text-align: center
+    font-size: 14px
+    font-weight: bold
+    border-radius: 5px
+    background-color: var(--yellow)
+    transition: .6s all
+    color: #fff
+    padding: 0 40px
+    text-transform: capitalize
+    &:hover
+      cursor: pointer
+      box-shadow: 10px 10px 73px -16px rgba(255,158,0,0.97)
+
+
+
+
+

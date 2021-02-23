@@ -1,3 +1,4 @@
+import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,6 +17,7 @@ import {
   Home,
   Play,
 } from './pages';
+import store from './lib/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.sass';
 
@@ -56,64 +58,66 @@ const App = () => {
   ];
 
   return (
-    <Router>
-      <div className="App">
-        <Header />
-        <Slider />
-        <Container>
-          <Row>
-            <Col lg={8} className="content">
-              <Switch>
-                <Route path="/" exact>
-                  <Home news={news} />
-                </Route>
-                <Route path="/play" component={Play} />
-              </Switch>
-            </Col>
-            <Col lg={4}>
-              <Aside/>
-            </Col>
-            <Col md={12} className="social_list">
-              <Row>
-                <Col md={6} xl={3}>
-                  <div className="socialBlock twitch">
-                    <img src="/images/twitch.png" alt="" className="logo_social" />
-                    <a className="btn_link" href=""
-                      >Подписаться <img src="/images/more.png" alt=""
-                    /></a>
-                  </div>
-                </Col>
-                <Col md={6} xl={3}>
-                  <div className="socialBlock youtube">
-                    <img src="/images/youtube.png" alt="" className="logo_social" />
-                    <a className="btn_link" href=""
-                      >Подписаться <img src="/images/more.png" alt=""
-                    /></a>
-                  </div>
-                </Col>
-                <Col md={6} xl={3}>
-                  <div className="socialBlock vk">
-                    <img src="/images/vk.png" alt="" className="logo_social" />
-                    <a className="btn_link" href=""
-                      >Подписаться <img src="/images/more.png" alt=""
-                    /></a>
-                  </div>
-                </Col>
-                <Col md={6} xl={3}>
-                  <div className="socialBlock instagram">
-                    <img src="/images/instagram.png" alt="" className="logo_social" />
-                    <a className="btn_link" href=""
-                      >Подписаться <img src="/images/more.png" alt=""
-                    /></a>
-                  </div>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
-        <Footer />
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Header />
+          <Slider />
+          <Container>
+            <Row>
+              <Col lg={8} className="content">
+                <Switch>
+                  <Route path="/" exact>
+                    <Home news={news} />
+                  </Route>
+                  <Route path="/play" component={Play} />
+                </Switch>
+              </Col>
+              <Col lg={4}>
+                <Aside/>
+              </Col>
+              <Col md={12} className="social_list">
+                <Row>
+                  <Col md={6} xl={3}>
+                    <div className="socialBlock twitch">
+                      <img src="/images/twitch.png" alt="" className="logo_social" />
+                      <a className="btn_link" href=""
+                        >Подписаться <img src="/images/more.png" alt=""
+                      /></a>
+                    </div>
+                  </Col>
+                  <Col md={6} xl={3}>
+                    <div className="socialBlock youtube">
+                      <img src="/images/youtube.png" alt="" className="logo_social" />
+                      <a className="btn_link" href=""
+                        >Подписаться <img src="/images/more.png" alt=""
+                      /></a>
+                    </div>
+                  </Col>
+                  <Col md={6} xl={3}>
+                    <div className="socialBlock vk">
+                      <img src="/images/vk.png" alt="" className="logo_social" />
+                      <a className="btn_link" href=""
+                        >Подписаться <img src="/images/more.png" alt=""
+                      /></a>
+                    </div>
+                  </Col>
+                  <Col md={6} xl={3}>
+                    <div className="socialBlock instagram">
+                      <img src="/images/instagram.png" alt="" className="logo_social" />
+                      <a className="btn_link" href=""
+                        >Подписаться <img src="/images/more.png" alt=""
+                      /></a>
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
+          <Footer />
+        </div>
+      </Router>
+    </Provider>
   );
 };
 
