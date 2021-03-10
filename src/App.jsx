@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
+import { NotificationContainer } from 'react-notifications';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,10 +16,12 @@ import {
 } from './components';
 import {
   Home,
+  Lk,
   Play,
 } from './pages';
 import store from './lib/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-notifications/lib/notifications.css';
 import './App.sass';
 
 const App = () => {
@@ -71,6 +74,7 @@ const App = () => {
                     <Home news={news} />
                   </Route>
                   <Route path="/play" component={Play} />
+                  <Route path="/lk" component={Lk} />
                 </Switch>
               </Col>
               <Col lg={4}>
@@ -115,6 +119,8 @@ const App = () => {
             </Row>
           </Container>
           <Footer />
+          
+          <NotificationContainer />
         </div>
       </Router>
     </Provider>

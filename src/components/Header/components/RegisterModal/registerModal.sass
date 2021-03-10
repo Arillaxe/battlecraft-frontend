@@ -12,3 +12,23 @@
     color: #fff
     padding: 0 40px
     text-transform: capitalize
+    &:disabled
+      background-color: #b66e02
+      color: #999
+  .spinner-wrapper
+    position: absolute
+    width: 100%
+    height: 100%
+    background-color: rgba(0, 0, 0, 0.5)
+    z-index: 100
+    display: flex
+    justify-content: center
+    align-items: center
+    .spinner-border
+      width: 4rem
+      height: 4rem
+  .error-message
+    width: 100%
+    margin-top: .25rem
+    font-size: 80%
+    color: #dc3545
