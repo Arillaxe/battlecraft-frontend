@@ -36,8 +36,49 @@ class API {
 
     return data;
   }
+
+  async getNews(page) {
+    const { data } = await axios.get(`${this.baseURL}/news?page=${page}`);
+
+    return data;
+  }
+
+  async getNewsById(id) {
+    const { data } = await axios.get(`${this.baseURL}/news/${id}`);
+
+    return data;
+  }
+
+  async getStreams() {
+    const { data } = await axios.get(`${this.baseURL}/streams`);
+
+    return data;
+  }
+
+  async getShopItemsByServer(page, server) {
+    const { data } = await axios.get(`${this.baseURL}/shop?page=${page}&server=${server}`);
+
+    return data;
+  }
+
+  async getServers() {
+    const { data } = await axios.get(`${this.baseURL}/servers`);
+
+    return data;
+  }
+
+  async uploadSkin(token, params) {
+    const { data } = await axios.post(`${this.baseURL}/user/change/skin`, params, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return data;
+  }
 }
 
-const APISingleton = new API('http://localhost:4000');
+const APISingleton = new API('https://api-battlecraft.loca.lt');
 
 export default APISingleton;

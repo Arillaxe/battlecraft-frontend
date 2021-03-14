@@ -25,7 +25,6 @@ const RegisterModal = (props) => {
   }
 
   const captchaOnChange = (...b) => {
-    console.log(b)
     setCaptchaPassed(true);
   }
 
@@ -64,11 +63,11 @@ const RegisterModal = (props) => {
           </Form.Group>
           <Form.Group>
             <ReCaptcha
-              sitekey="6LcNXngaAAAAADy8mo17REJAbRu33GMr97Tidp6A"
+              sitekey="6Lca7n0aAAAAAGjJHRTynIKloxgNaNnTBXIgtRa0"
               onChange={captchaOnChange}
             />
           </Form.Group>
-          <button disabled={!captchaPassed && false} type="submit" className="btn_submit">
+          <button disabled={!captchaPassed} type="submit" className="btn_submit">
             Зарегистрироваться
           </button>
         </Form>

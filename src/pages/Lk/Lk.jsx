@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
@@ -13,6 +13,7 @@ import {
   createOrbitControls,
   WalkingAnimation,
 } from 'skinview3d';
+import { UploadImage } from '../../components';
 import { userSlice } from '../../slices';
 import API from '../../lib/api.js';
 import './lk.sass';
@@ -20,6 +21,7 @@ import './lk.sass';
 const Lk = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const imageRef = useRef();
 
   const user = useSelector(({ user }) => user);
   const [loading, setLoading] = useState(false);
@@ -33,13 +35,13 @@ const Lk = () => {
         canvas: document.getElementById('skin_container'),
         width: 300,
         height: 400,
-        skin: '/images/steve.png',
+        skin: `/images/${user.skin}`,
       });
   
       createOrbitControls(skinViewer);
       skinViewer.animations.add(WalkingAnimation);
     }
-  }, []);
+  }, [user]);
 
   const changePassword = async (e) => {
     e.preventDefault();
@@ -56,6 +58,25 @@ const Lk = () => {
       e.target.reset();
     } catch (e) {
       setPasswordError(e.response.data.message);
+    }
+
+    setLoading(false);
+  };
+
+  const uploadSkin = async (file) => {
+    setLoading(true);
+
+    console.log(File);
+
+    const formData = new FormData();
+    formData.append('skin', file);
+    try {
+      const { skin } = await API.uploadSkin(user.token, formData);
+
+      dispatch(userSlice.actions.setData({ skin }));
+      NotificationManager.success('Пароль успешно изменен!');
+    } catch (e) {
+      NotificationManager.error(e.response.data.message);
     }
 
     setLoading(false);
@@ -82,7 +103,7 @@ const Lk = () => {
                 <div className="title">Скин</div>
                   <canvas id="skin_container"></canvas>
                   <div className="buttons">
-                    <button className="btn_skin">Загрузить скин</button>
+                    <UploadImage ref={imageRef} id="skin-upload" label="Загрузить скин" onChange={uploadSkin} className="btn_skin" />
                     <button className="btn_skin">Загрузить плащ</button>
                   </div>
                 </div>
@@ -132,7 +153,7 @@ const Lk = () => {
                       <Form.Label>Ник игрока</Form.Label>
                       <Form.Control type="text" placeholder="Введите ник игрока" />
                     </Form.Group>
-                    <Form.Group controlId="formBasicSite">
+                    <Form.Group controlId="formBasicSum">
                       <Form.Label>Сумма</Form.Label>
                       <Form.Control type="text" placeholder="Введите сумму" />
                     </Form.Group>

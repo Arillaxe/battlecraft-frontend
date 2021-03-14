@@ -1,20 +1,31 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
+import API from '../../lib/api.js';
 import './home.sass';
 
-const Home = (props) => {
-  const { news = [] } = props;
+const Home = () => {
+  const [news, setNews] = useState([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      const news = await API.getNews(1);
+
+      setNews(news.data);
+    };
+
+    fetchNews();
+  }, []);
 
   return (
     <div>
       {news.map((newsItem) => {
         const {
           id,
-          url,
-          image = '/images/news_no_image.png',
+          img_url,
           title,
-          shortText,
+          text,
           createdAt,
         } = newsItem;
 
@@ -23,15 +34,15 @@ const Home = (props) => {
             <div className="content_news">
               <div className="row">
                 <Col xl={4} className="picture_block">
-                  <img src={image} alt="" />
+                  <img src={`https://api-battlecraft.loca.lt/images/${img_url || 'news_no_image.png'}`} alt="" />
                 </Col>
                 <Col xl={8} className="info_news">
                   <div>
                     <div className="title_news">{title}</div>
-                    <div className="desc_news">{shortText}</div>
+                    <div className="desc_news">{text}</div>
                   </div>
                   <div className="news_footer">
-                    <Link className="btn_link" to={`/news/${url}`}>
+                    <Link className="btn_link" to={`/news/${id}`}>
                       Читать <img src="/images/more.png" alt=""/>
                     </Link>
                     <div className="data">{moment(createdAt).format('LL')}</div>

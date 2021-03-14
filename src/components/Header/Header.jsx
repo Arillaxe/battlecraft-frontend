@@ -22,6 +22,7 @@ const Header = () => {
 
   const [loginModalVisible, setLoginModalVisible] = useState(false);
   const [registerModalVisible, setRegisterModalVisible] = useState(false);
+  const [servers, setServers] = useState([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalError, setModalError] = useState('');
 
@@ -36,6 +37,17 @@ const Header = () => {
     setModalError('');
   };
   const handleRegisterShow = () => setRegisterModalVisible(true);
+
+  useEffect(() => {
+    const fetchServers = async () => {
+      const servers = await API.getServers();
+
+      setServers(servers);
+      console.log(servers);
+    };
+
+    fetchServers();
+  }, []);
 
   useEffect(async () => {
     if (user.token) {
@@ -67,10 +79,11 @@ const Header = () => {
 
     const formData = new FormData(e.target);
     try {
-      const response = await API.register(Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {}));
+      const { token } = await API.register(Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {}));
 
-      console.log(response);
+      dispatch(userSlice.actions.setData({ token }));
       setModalError('');
+      setRegisterModalVisible(false);
     } catch (e) {
       setModalError(e.response.data.message);
     }
@@ -131,21 +144,17 @@ const Header = () => {
                 <Link to="/forum" className="nav_link">Форум</Link>
               </Nav.Item>
               <NavDropdown title="Сервера" id="collasible-nav-dropdown" className="nav_dropdown">
-                <NavDropdown.ItemText>
-                  <Link to="/server/1">Сервер 1</Link>
-                </NavDropdown.ItemText>
-                <NavDropdown.ItemText>
-                  <Link to="/server/2">Сервер 2</Link>
-                </NavDropdown.ItemText>
-                <NavDropdown.ItemText>
-                  <Link to="/server/3">Сервер 3</Link>
-                </NavDropdown.ItemText>
+                {servers.map((server) => (
+                  <NavDropdown.ItemText key={`server-${server.id}`}>
+                    <Link to={`/server/${server.id}`}>{server.name}</Link>
+                  </NavDropdown.ItemText>
+                ))}
               </NavDropdown>
               <Nav.Item>
-                <Link to="/play" className="nav_link">Донат</Link>
+                <Link to="/shop" className="nav_link">Донат</Link>
               </Nav.Item>
               <Nav.Item>
-                <Link to="/play" className="nav_link">В разработке</Link>
+                <Link to="/rules" className="nav_link">Правила</Link>
               </Nav.Item>
             </Nav>
             <Nav>
@@ -172,10 +181,10 @@ const Header = () => {
                             <div>Личный кабинет</div>
                           </Link>
                           {user.role === 'admin' && (
-                            <Link to="/admin" className="profile-info-link">
+                            <a href={`https://hard-wombat-54.loca.lt/auth?token=${localStorage.getItem('token')}`} className="profile-info-link" target="_blank">
                               <span className="material-icons">admin_panel_settings</span>
                               <div>Панель управления</div>
-                            </Link>
+                            </a>
                           )}
                           <button className="btn-logout" onClick={logout}>
                             <span className="material-icons">logout</span>

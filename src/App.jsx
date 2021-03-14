@@ -12,12 +12,17 @@ import {
   Aside,
   Footer,
   Header,
+  ScrollToTop,
   Slider,
 } from './components';
 import {
   Home,
   Lk,
+  News,
   Play,
+  Servers,
+  Shop,
+  Rules,
 } from './pages';
 import store from './lib/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,56 +30,24 @@ import 'react-notifications/lib/notifications.css';
 import './App.sass';
 
 const App = () => {
-  const news = [
-    {
-      id: '1',
-      title: 'Test news title 1312',
-      shortText: '      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla doloribus repellendus quae amet voluptate, laudantium ipsam fugiat ullam voluptatibus autem officia repellat consequatur ducimus tenetur nobis in, accusamus hic delectus.',
-      url: 'news/1',
-      image: 'https://sun9-75.userapi.com/impg/iOg_WA-s_L22Xke0zPJuDb4jkX7JhhKPWGQpTQ/Zddb-qSqRcc.jpg?size=1280x799&quality=96&sign=3405542bae9addc2248c29c3be479efd&type=album',
-      createdAt: Date.now(),
-    },
-    {
-      id: '2',
-      title: 'Test news title 1312',
-      shortText: '      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla doloribus repellendus quae amet voluptate, laudantium ipsam fugiat ullam voluptatibus autem officia repellat consequatur ducimus tenetur nobis in, accusamus hic delectus.',
-      url: 'news/1',
-      image: 'https://sun9-75.userapi.com/impg/iOg_WA-s_L22Xke0zPJuDb4jkX7JhhKPWGQpTQ/Zddb-qSqRcc.jpg?size=1280x799&quality=96&sign=3405542bae9addc2248c29c3be479efd&type=album',
-      createdAt: Date.now(),
-    },
-    {
-      id: '3',
-      title: 'Test news title 1312',
-      shortText: '      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla doloribus repellendus quae amet voluptate, laudantium ipsam fugiat ullam voluptatibus autem officia repellat consequatur ducimus tenetur nobis in, accusamus hic delectus.',
-      url: 'news/1',
-      image: 'https://sun9-75.userapi.com/impg/iOg_WA-s_L22Xke0zPJuDb4jkX7JhhKPWGQpTQ/Zddb-qSqRcc.jpg?size=1280x799&quality=96&sign=3405542bae9addc2248c29c3be479efd&type=album',
-      createdAt: Date.now(),
-    },
-    {
-      id: '4',
-      title: 'Test news title 1312',
-      shortText: '      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla doloribus repellendus quae amet voluptate, laudantium ipsam fugiat ullam voluptatibus autem officia repellat consequatur ducimus tenetur nobis in, accusamus hic delectus.',
-      url: 'news/1',
-      image: 'https://sun9-75.userapi.com/impg/iOg_WA-s_L22Xke0zPJuDb4jkX7JhhKPWGQpTQ/Zddb-qSqRcc.jpg?size=1280x799&quality=96&sign=3405542bae9addc2248c29c3be479efd&type=album',
-      createdAt: Date.now(),
-    },
-  ];
-
   return (
     <Provider store={store}>
       <Router>
         <div className="App">
+          <ScrollToTop />
           <Header />
           <Slider />
           <Container>
             <Row>
               <Col lg={8} className="content">
                 <Switch>
-                  <Route path="/" exact>
-                    <Home news={news} />
-                  </Route>
-                  <Route path="/play" component={Play} />
+                  <Route path="/" exact component={Home} />
                   <Route path="/lk" component={Lk} />
+                  <Route path="/news/:id" component={News} />
+                  <Route path="/play" component={Play} />
+                  <Route path="/shop" component={Shop} />
+                  <Route path="/rules" component={Rules} />
+                  <Route path="/servers/:id" component={Servers} />
                 </Switch>
               </Col>
               <Col lg={4}>
