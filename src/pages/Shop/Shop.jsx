@@ -52,6 +52,7 @@ const Shop = () => {
 
   return (
     <div className="shop">
+      <h2>Донат</h2>
       <div className="shop-controls">
         <div className="shop-controls-title">Выберите сервер:</div>
         <DropdownButton className="shop-dropdown" id="dropdown-basic-button" title={currentServer.name}>
@@ -68,7 +69,7 @@ const Shop = () => {
               {items.filter(({ type }) => type === currentType).map(({ id, title, image, price }) => (
                 <div key={id} className="shop-item">
                   <div className="shop-image-wrapper">
-                    <img src={`https://api-battlecraft.loca.lt/images/${image}`} alt="" />
+                    <img src={`${process.env.REACT_APP_SERVER_HOST}/images/${image}`} alt="" />
                   </div>
                   <div className="shop-item-info">
                     <div className="shop-item-title">{title}</div>

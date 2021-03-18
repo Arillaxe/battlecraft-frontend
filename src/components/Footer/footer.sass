@@ -2,36 +2,29 @@ footer
   margin-top: 50px
   padding: 30px 0
   background: #343a4a
-  .title
-    color: #fff
-  .row
-    align-items: center
+  .container
+    display: flex
+    justify-content: space-between
+    @media (max-width: 600px)
+      flex-direction: column
+      align-items: center
     .logo
-      =mixin-media
-        @media (max-width: 575.98px)
-          margin-bottom: 15px
-          text-align: center
-      +mixin-media
       img
         width: 50px
-    .links
-      =mixin-media
-        @media (max-width: 359.98px)
-          display: flex
-          align-items: flex-start
-          flex-direction: column
-      +mixin-media
-      .projects
-        =mixin-media
-          @media (max-width: 359.98px)
-            max-width: 100%
-            &:first-child
-              margin-bottom: 15px
-        +mixin-media
-        .title
+    .footer-categories
+      display: flex
+      @media (max-width: 600px)
+        flex-direction: column
+      .footer-category
+        text-align: center
+        margin-left: 50px
+        @media (max-width: 600px)
+          margin-left: 0
+          margin-top: 30px
+        .footer-title
           font-size: 16px
           font-weight: 600
           margin-bottom: 5px
-        a
-          font-size: 14px
-          color: #e1e7ed
+          a
+            font-size: 14px
+            color: #e1e7ed

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -28,15 +29,29 @@ import store from './lib/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-notifications/lib/notifications.css';
 import './App.sass';
+import './dark.sass';
 
 const App = () => {
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    setTheme(localStorage.getItem('theme') || 'light');
+  }, []);
+
+  const saveSetTheme = (theme) => {
+    localStorage.setItem('theme', theme);
+    setTheme(theme);
+  };
+
   return (
     <Provider store={store}>
       <Router>
-        <div className="App">
+        <div className={`App${theme === 'dark' ? ' dark' : ''}`}>
           <ScrollToTop />
-          <Header />
-          <Slider />
+          <Header theme={theme} setTheme={saveSetTheme} />
+          <Switch>
+            <Route path="/" exact component={Slider} />
+          </Switch>
           <Container>
             <Row>
               <Col lg={8} className="content">

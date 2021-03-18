@@ -6,12 +6,6 @@
   background: #fff
   padding: 20px
   margin-bottom: 50px
-  &-title
-    color: #2e3338
-    font-size: 18px
-    font-weight: bold
-    margin-bottom: 15px
-    text-align: center
   &-description
     text-align: center
   &-counter
@@ -37,14 +31,20 @@
     border-color: var(--green) !important
     .play-counter, button
       background: var(--green) !important
+    button:hover
+      box-shadow: 10px 10px 73px -16px var(--green)
   &-yellow
     border-color: #ffc107 !important
     .play-counter, button
       background: #ffc107 !important
+    button:hover
+      box-shadow: 10px 10px 73px -16px var(--yellow)
   &-orange
     border-color: var(--orange) !important
     .play-counter, button
       background: var(--orange) !important
+    button:hover
+      box-shadow: 10px 10px 73px -16px var(--orange)
   &-blocks
     width: 100%
     display: flex

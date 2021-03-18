@@ -79,6 +79,6 @@ class API {
   }
 }
 
-const APISingleton = new API('https://api-battlecraft.loca.lt');
+const APISingleton = new API(process.env.REACT_APP_SERVER_HOST);
 
 export default APISingleton;

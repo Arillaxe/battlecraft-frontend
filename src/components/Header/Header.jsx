@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Switch from 'react-switch';
 import { SkinViewer } from 'skinview3d';
 import {
   LoginModal,
@@ -14,7 +15,8 @@ import { userSlice } from '../../slices';
 import API from '../../lib/api.js';
 import './header.sass';
 
-const Header = () => {
+const Header = (props) => {
+  const { theme, setTheme } = props;
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -43,7 +45,6 @@ const Header = () => {
       const servers = await API.getServers();
 
       setServers(servers);
-      console.log(servers);
     };
 
     fetchServers();
@@ -157,6 +158,17 @@ const Header = () => {
                 <Link to="/rules" className="nav_link">Правила</Link>
               </Nav.Item>
             </Nav>
+            <Switch
+              onColor="#0d1117"
+              offColor="#c2c4c7"
+              onHandleColor="#ff9b00"
+              offHandleColor="#ff9b00"
+              uncheckedIcon={<span className="material-icons switch-icon dark-icon">dark_mode</span>}
+              checkedIcon={<span className="material-icons switch-icon light-icon">light_mode</span>}
+              className="dark-theme-switcher"
+              checked={theme === 'dark'}
+              onChange={() => setTheme(theme === 'light' ? 'dark' : 'light' )}
+            />
             <Nav>
               <Nav.Item>
                 {user.login && (
@@ -181,7 +193,7 @@ const Header = () => {
                             <div>Личный кабинет</div>
                           </Link>
                           {user.role === 'admin' && (
-                            <a href={`https://hard-wombat-54.loca.lt/auth?token=${localStorage.getItem('token')}`} className="profile-info-link" target="_blank">
+                            <a href={`${process.env.REACT_APP_ADMIN_HOST}/auth?token=${localStorage.getItem('token')}`} className="profile-info-link" target="_blank">
                               <span className="material-icons">admin_panel_settings</span>
                               <div>Панель управления</div>
                             </a>

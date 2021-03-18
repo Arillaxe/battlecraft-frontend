@@ -14,10 +14,6 @@
     font-weight: bold
     color: #2e3338
     margin-bottom: 20px
-    .spinner
-      width: 15px
-      height: 15px
-      margin-left: 10px
 .stream_block
   .no_stream,
   iframe
@@ -61,22 +57,6 @@
       font-weight: bold
       color: #fff
       border-radius: 20px
-    &.server_one
-      .progress_bar
-        .value
-          background: linear-gradient(0deg, rgb(252, 91, 66) 0%, rgb(255, 137, 107) 100%)
-      .info_server
-        .number
-          background: linear-gradient(0deg, rgb(252, 91, 66) 0%, rgb(255, 137, 107) 100%)
-    &.server_two
-      .progress_bar
-        .value
-          background: rgb(103, 178, 23)
-          background: linear-gradient(90deg, rgba(103, 178, 23, 1) 0%, rgba(154, 219, 2, 1) 100%)
-      .info_server
-        .number
-          background: rgb(103, 178, 23)
-          background: linear-gradient(90deg, rgba(103, 178, 23, 1) 0%, rgba(154, 219, 2, 1) 100%)
     .progress_bar
       position: relative
       margin-top: 15px
@@ -114,7 +94,18 @@
         margin-left: 15px
         display: flex
         align-items: center
-        .spinner
-          width: 15px
-          height: 15px
-          margin-left: 8px
+    .progress_bar
+      .value
+        background: rgb(103, 178, 23)
+        background: linear-gradient(90deg, rgba(103, 178, 23, 1) 0%, rgba(154, 219, 2, 1) 100%)
+    .info_server
+      .number
+        background: rgb(103, 178, 23)
+        background: linear-gradient(90deg, rgba(103, 178, 23, 1) 0%, rgba(154, 219, 2, 1) 100%)
+    &.server_inactive
+      .progress_bar
+        .value
+          background: linear-gradient(0deg, rgb(252, 91, 66) 0%, rgb(255, 137, 107) 100%)
+      .info_server
+        .number
+          background: linear-gradient(0deg, rgb(252, 91, 66) 0%, rgb(255, 137, 107) 100%)

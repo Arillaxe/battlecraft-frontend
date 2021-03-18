@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { NotificationManager } from 'react-notifications';
 import API from '../../lib/api.js';
+import SocketIO from '../../lib/socketIO.js';
 import './aside.sass';
 
 const Aside = () => {
   const [streams, setStreams] = useState([]);
+  const [servers, setServers] = useState([]);
 
   const fetchStreams = async () => {
     try {
@@ -18,61 +20,36 @@ const Aside = () => {
 
   useEffect(() => {
     fetchStreams();
+
+    SocketIO.getClient().on('get_servers_info', (serversInfo) => {
+      setServers(serversInfo);
+    });
+    SocketIO.getClient().emit('get_servers_info');
   }, []);
 
   return (
     <div className="info_block">
       <div className="online_block" data-aos="slide-up" data-aos-delay="200">
         <div className="title">Игровые сервера</div>
-        <div className="server_block server_one">
-          <div className="info_server">
-            <div className="number">1</div>
-            <div className="name_server">
-              BattleCraft PVP
-              <div className="spinner spinner-green"></div>
+        {servers.map((server, idx) => (
+          <div key={`server-info-${idx}`} className={`server_block ${server.inactive && 'server_inactive'}`}>
+            <div className="info_server">
+              <div className="number">{idx + 1}</div>
+              <div className="name_server">{server.name}</div>
+              <div className="online_status online"></div>
             </div>
-            <div className="online_status online"></div>
-          </div>
-          <div className="progress_bar">
-            <div className="value" style={{ width: '20%' }}></div>
-          </div>
-          <div className="server_players">1000</div>
-        </div>
-        <div className="server_block server_two">
-          <div className="info_server">
-            <div className="number">2</div>
-            <div className="name_server">
-              BattleCraft RPG
-              <div className="spinner spinner-green"></div>
+            <div className="progress_bar">
+              <div className="value" style={{ width: `${server.players / server.max_players * 100}%` }}></div>
             </div>
-            <div className="online_status online"></div>
+            <div className="server_players">{server.players || 0}</div>
           </div>
-          <div className="progress_bar">
-            <div className="value" style={{ width: '70%' }}></div>
-          </div>
-          <div className="server_players">1000</div>
-        </div>
-        <div className="server_block server_two">
-          <div className="info_server">
-            <div className="number">3</div>
-            <div className="name_server">
-              BattleCraft RPG
-              <div className="spinner spinner-green"></div>
-            </div>
-            <div className="online_status online"></div>
-          </div>
-          <div className="progress_bar">
-            <div className="value" style={{ width: '45%' }}></div>
-          </div>
-          <div className="server_players">1000</div>
-        </div>
+        ))}
       </div>
       <div className="stream_block" data-aos="slide-up">
         <div className="title">
-          Прямая трансляция
-          <div className="spinner spinner-red"></div>
+          Прямые трансляции
         </div>
-        {streams.map(({ id, channel }) => (
+        {streams.length > 0 && streams.map(({ id, channel }) => (
           <iframe
             key={`streams-channel-${id}`}
             src={`https://player.twitch.tv/?channel=${channel}&parent=localhost&autoplay=false`}
@@ -81,8 +58,9 @@ const Aside = () => {
             scrolling="no"
           />
         ))}
-        {/* <div className="no_stream">Нет трансляций</div>
-        <div className="no_stream">Нет трансляций</div> */}
+        {streams.length === 0 && (
+          <div className="no_stream">Нет трансляций</div>
+        )}
       </div>
     </div>
   );

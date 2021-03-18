@@ -1,8 +1,9 @@
+import { Link } from 'react-router-dom';
 import './play.sass';
 
 const Play = () => (
   <div className="play">
-    <div className="play-title">Как начать играть</div>
+    <h2>Как начать играть</h2>
     <div className="play-blocks">
       <div className="block play-green">
         <div className="play-counter">1</div>
@@ -18,7 +19,9 @@ const Play = () => (
         <div className="play-description">
           Незнание правил не освобождает Вас от ответсвенности!
         </div>
-        <button className="">Прочесть правила</button>
+        <Link to="/rules">
+          <button className="">Прочесть правила</button>
+        </Link>
       </div>
       <div className="block play-orange">
         <div className="play-counter">3</div>

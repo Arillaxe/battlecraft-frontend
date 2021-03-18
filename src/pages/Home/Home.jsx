@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Col from 'react-bootstrap/Col';
+import ReactMarkdown from 'react-markdown';
 import moment from 'moment';
 import API from '../../lib/api.js';
 import './home.sass';
@@ -34,12 +35,14 @@ const Home = () => {
             <div className="content_news">
               <div className="row">
                 <Col xl={4} className="picture_block">
-                  <img src={`https://api-battlecraft.loca.lt/images/${img_url || 'news_no_image.png'}`} alt="" />
+                  <img src={`${process.env.REACT_APP_SERVER_HOST}/images/${img_url || 'news_no_image.png'}`} alt="" />
                 </Col>
                 <Col xl={8} className="info_news">
                   <div>
                     <div className="title_news">{title}</div>
-                    <div className="desc_news">{text}</div>
+                    <div className="desc_news">
+                      <ReactMarkdown allowedTypes={['root', 'text', 'paragraph', 'strong', 'image']}>{text}</ReactMarkdown>
+                    </div>
                   </div>
                   <div className="news_footer">
                     <Link className="btn_link" to={`/news/${id}`}>
