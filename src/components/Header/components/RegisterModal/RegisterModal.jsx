@@ -14,18 +14,18 @@ const RegisterModal = (props) => {
     errorMessage,
   } = props;
 
-  const [captchaPassed, setCaptchaPassed] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
 
   const localOnSubmit = (e) => {
     e.preventDefault();
 
-    if (captchaPassed || true) {
-      onSubmit(e);
+    if (captchaToken !== '') {
+      onSubmit(e, captchaToken);
     }
   }
 
-  const captchaOnChange = (...b) => {
-    setCaptchaPassed(true);
+  const captchaOnChange = (token) => {
+    setCaptchaToken(token);
   }
 
   return (
@@ -67,7 +67,7 @@ const RegisterModal = (props) => {
               onChange={captchaOnChange}
             />
           </Form.Group>
-          <button disabled={!captchaPassed} type="submit" className="btn_submit">
+          <button disabled={captchaToken === ''} type="submit" className="btn_submit">
             Зарегистрироваться
           </button>
         </Form>

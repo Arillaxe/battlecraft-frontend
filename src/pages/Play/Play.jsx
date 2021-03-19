@@ -11,7 +11,9 @@ const Play = () => (
         <div className="play-description">
           Придумайте уникальный ник и невероятно сложный пароль.
         </div>
-        <button>Зарегистрироваться</button>
+        <Link to="/register">
+          <button>Зарегистрироваться</button>
+        </Link>
       </div>
       <div className="block play-yellow">
         <div className="play-counter">2</div>

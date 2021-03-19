@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -19,6 +19,7 @@ const Header = (props) => {
   const { theme, setTheme } = props;
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
 
   const user = useSelector(({ user }) => user);
 
@@ -50,6 +51,10 @@ const Header = (props) => {
     fetchServers();
   }, []);
 
+  useEffect(() => {
+    setRegisterModalVisible(location.pathname === '/register');
+  }, [location])
+
   useEffect(async () => {
     if (user.token) {
       const userData = await API.getUser(user.token);
@@ -73,14 +78,16 @@ const Header = (props) => {
     history.push('/');
   }
 
-  const onRegisterSubmit = async (e) => {
+  const onRegisterSubmit = async (e, captchaToken) => {
     e.preventDefault();
 
     setModalLoading(true);
 
     const formData = new FormData(e.target);
     try {
-      const { token } = await API.register(Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {}));
+      const { token } = await API.register(
+        Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), { captchaToken })
+      );
 
       dispatch(userSlice.actions.setData({ token }));
       setModalError('');
@@ -99,7 +106,9 @@ const Header = (props) => {
 
     const formData = new FormData(e.target);
     try {
-      const { token } = await API.login(Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {}));
+      const { token } = await API.login(
+        Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {})
+      );
 
       if (rememberMe) {
         localStorage.setItem('token', token);

@@ -51,12 +51,14 @@ const App = () => {
           <Header theme={theme} setTheme={saveSetTheme} />
           <Switch>
             <Route path="/" exact component={Slider} />
+            <Route path="/register" exact component={Slider} />
           </Switch>
           <Container>
             <Row>
               <Col lg={8} className="content">
                 <Switch>
                   <Route path="/" exact component={Home} />
+                  <Route path="/register" exact component={Home} />
                   <Route path="/lk" component={Lk} />
                   <Route path="/news/:id" component={News} />
                   <Route path="/play" component={Play} />
