@@ -104,7 +104,6 @@ const Lk = () => {
                   <canvas id="skin_container"></canvas>
                   <div className="buttons">
                     <UploadImage ref={imageRef} id="skin-upload" label="Загрузить скин" onChange={uploadSkin} className="btn_skin" />
-                    <button className="btn_skin">Загрузить плащ</button>
                   </div>
                 </div>
               </Col>
@@ -116,6 +115,10 @@ const Lk = () => {
                 <div className="block">
                   <div className="title">Статистика ваших рефералов</div>
                   <div className="text-danger">Вы еще не привели друга</div>
+                </div>
+                <div className="block">
+                  <div className="title">Ваш реферальный код</div>
+                  <div className="text-info">{user.ref_code}</div>
                 </div>
               </Col>
             </Row>
