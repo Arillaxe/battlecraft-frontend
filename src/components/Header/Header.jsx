@@ -52,8 +52,8 @@ const Header = (props) => {
   }, []);
 
   useEffect(() => {
-    setRegisterModalVisible(location.pathname === '/register');
-  }, [location])
+    setRegisterModalVisible(location.pathname === '/register' || registerModalVisible);
+  }, [location]);
 
   useEffect(async () => {
     if (user.token) {
