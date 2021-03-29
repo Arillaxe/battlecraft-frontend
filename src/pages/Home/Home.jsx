@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import ReactMarkdown from 'react-markdown';
 import moment from 'moment';
 import API from '../../lib/api.js';
+import news_no_image from './news_no_image.png';
 import './home.sass';
 
 const Home = () => {
@@ -26,7 +27,7 @@ const Home = () => {
           id,
           img_url,
           title,
-          text,
+          preview,
           createdAt,
         } = newsItem;
 
@@ -35,13 +36,13 @@ const Home = () => {
             <div className="content_news">
               <div className="row">
                 <Col xl={4} className="picture_block">
-                  <img src={`${process.env.REACT_APP_SERVER_HOST}/images/${img_url || 'news_no_image.png'}`} alt="" />
+                  <img src={img_url ? `${process.env.REACT_APP_SERVER_HOST}/images/${img_url}` : news_no_image} alt="" />
                 </Col>
                 <Col xl={8} className="info_news">
                   <div>
                     <div className="title_news">{title}</div>
                     <div className="desc_news">
-                      <ReactMarkdown allowedTypes={['root', 'text', 'paragraph', 'strong', 'image']}>{text}</ReactMarkdown>
+                      <ReactMarkdown allowedTypes={['root', 'text', 'paragraph', 'strong', 'image']}>{preview}</ReactMarkdown>
                     </div>
                   </div>
                   <div className="news_footer">
