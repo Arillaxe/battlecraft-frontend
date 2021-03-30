@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -15,10 +16,12 @@ const LoginModal = (props) => {
     errorMessage,
   } = props;
 
+  const theme = useSelector(({ app }) => app.theme);
+
   const [rememberMe, setRememberMe] = useState(true);
 
   return (
-    <Modal show={visible} onHide={onClose} className="login_modal">
+    <Modal show={visible} onHide={onClose} className={`login_modal${theme === 'dark' ? ' dark' : ''}`}>
       {loading && (
         <div className="spinner-wrapper">
           <Spinner animation="border" role="status" variant="light" />

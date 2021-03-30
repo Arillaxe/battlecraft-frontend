@@ -11,16 +11,16 @@ import {
   LoginModal,
   RegisterModal,
 } from './components';
-import { userSlice } from '../../slices';
+import { userSlice, appSlice } from '../../slices';
 import API from '../../lib/api.js';
 import './header.sass';
 
-const Header = (props) => {
-  const { theme, setTheme } = props;
+const Header = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
 
+  const theme = useSelector(({ app }) => app.theme);
   const user = useSelector(({ user }) => user);
 
   const [loginModalVisible, setLoginModalVisible] = useState(false);
@@ -48,11 +48,27 @@ const Header = (props) => {
       setServers(servers);
     };
 
+    const updateToken = async () => {
+      if (user.token) {
+        try {
+          const { token } = await API.updateToken(user.token);
+
+          localStorage.setItem('token', token);
+
+          dispatch(userSlice.actions.setData({ token }));
+        } catch (e) {
+          console.log(e.response);
+        }
+      }
+    };
+
     fetchServers();
+    updateToken();
   }, []);
 
   useEffect(() => {
     setRegisterModalVisible(location.pathname === '/register' || registerModalVisible);
+    setLoginModalVisible(location.pathname === '/login' || loginModalVisible);
   }, [location]);
 
   useEffect(async () => {
@@ -176,7 +192,7 @@ const Header = (props) => {
               checkedIcon={<span className="material-icons switch-icon light-icon">light_mode</span>}
               className="dark-theme-switcher"
               checked={theme === 'dark'}
-              onChange={() => setTheme(theme === 'light' ? 'dark' : 'light' )}
+              onChange={() => dispatch(appSlice.actions.setTheme(theme === 'light' ? 'dark' : 'light' ))}
             />
             <Nav>
               <Nav.Item>

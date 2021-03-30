@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import ReCaptcha from 'react-google-recaptcha';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -13,6 +14,8 @@ const RegisterModal = (props) => {
     loading,
     errorMessage,
   } = props;
+
+  const theme = useSelector(({ app }) => app.theme);
 
   const [captchaToken, setCaptchaToken] = useState('');
 
@@ -29,7 +32,7 @@ const RegisterModal = (props) => {
   }
 
   return (
-    <Modal show={visible} onHide={onClose} className="register_modal">
+    <Modal show={visible} onHide={onClose} className={`register_modal${theme === 'dark' ? ' dark' : ''}`}>
       {loading && (
         <div className="spinner-wrapper">
           <Spinner animation="border" role="status" variant="light" />

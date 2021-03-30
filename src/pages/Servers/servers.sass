@@ -1,0 +1,60 @@
+.servers
+  color: #586c81
+  font-size: 14px
+  font-weight: 500
+  border-radius: 10px
+  background: #fff
+  padding: 20px
+  margin-bottom: 50px
+  .blocks
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+  .block
+    width: 100%
+    box-shadow: 0px 0px 25px 2px rgba(0,0,0,0.1)
+    border-radius: .25em
+    margin-bottom: 20px
+    padding: 20px
+    border-top: 3px solid var(--yellow)
+    display: flex
+    flex-direction: column
+    align-items: center
+  &-mainInfo
+    display: flex
+    flex-direction: column
+    margin-top: 15px
+    &-section
+      display: flex
+      padding: 10px
+      border-top: 1px solid #dee2e6
+    &-title,
+    &-text
+      width: 100%
+    &-text
+      font-weight: bold
+  &-featuresList
+    display: flex
+    flex-direction: column
+    margin-top: 15px
+    &-feature
+      padding: 10px
+      display: flex
+      align-items: center
+      span
+        margin-right: 15px
+  &-mods
+    display: flex
+    flex-direction: column
+    &-mod
+      line-height: 50px
+      text-align: center
+      font-size: 14px
+      font-weight: bold
+      border-radius: 5px
+      background-color: var(--yellow)
+      transition: .6s all
+      color: #fff
+      padding: 0 40px
+      text-transform: capitalize
+      margin-top: 10px

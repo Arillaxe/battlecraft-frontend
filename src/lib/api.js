@@ -77,6 +77,28 @@ class API {
 
     return data;
   }
+
+  async buyItem(token, itemId) {
+    const { data } = await axios.post(`${this.baseURL}/shop/buy`, {
+      products: [itemId],
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return data;
+  }
+
+  async updateToken(token) {
+    const { data } = await axios.post(`${this.baseURL}/auth/updateToken`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return data;
+  }
 }
 
 const APISingleton = new API(process.env.REACT_APP_SERVER_HOST);
