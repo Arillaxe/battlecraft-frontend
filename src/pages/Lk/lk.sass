@@ -8,6 +8,14 @@
   padding: 20px
   margin-bottom: 50px
   overflow: hidden
+  .btn_ref
+    margin-top: 10px
+  .lk-ref
+    &-row
+      margin-top: 10px
+      display: flex
+      justify-content: space-between
+      font-size: 16px
   .lk-balance
     color: var(--orange)
     display: flex
@@ -19,6 +27,8 @@
       margin-right: 5px
   .spinner-wrapper
     position: absolute
+    top: 0
+    left: 0
     width: 100%
     height: 100%
     background-color: rgba(0, 0, 0, 0.5)
@@ -64,6 +74,10 @@
         border-top: 1px solid #e1e1e1
         margin-top: 20px
         padding: 20px
+        display: flex
+        button
+          margin: 0 auto
+      .subBlock1
         display: flex
         button
           margin: 0 auto
@@ -120,3 +134,20 @@
 .tabs
   position: relative
   margin-top: -50px
+
+.lk-qr-image
+  display: flex
+  flex-direction: column
+  button
+    border: none
+    line-height: 50px
+    text-align: center
+    font-size: 14px
+    font-weight: bold
+    border-radius: .25em
+    background-color: var(--yellow)
+    transition: .6s all
+    color: #fff
+    padding: 0 30px
+  img
+    margin-bottom: 20px

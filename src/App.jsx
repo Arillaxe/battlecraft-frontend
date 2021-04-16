@@ -71,15 +71,15 @@ const App = () => {
                 <Col md={6} xl={3}>
                   <div className="socialBlock twitch">
                     <img src="/images/twitch.png" alt="" className="logo_social" />
-                    <a className="btn_link" href=""
+                    <a className="btn_link" href="https://www.twitch.tv/battlecrafttop" target="_blank"
                       >Подписаться <img src="/images/more.png" alt=""
                     /></a>
                   </div>
                 </Col>
                 <Col md={6} xl={3}>
                   <div className="socialBlock youtube">
-                    <img src="/images/youtube.png" alt="" className="logo_social" />
-                    <a className="btn_link" href=""
+                    <img src={`/images/youtube${theme === 'dark' ? '_dark' : ''}.png`} alt="" className="logo_social" />
+                    <a className="btn_link" href="https://www.youtube.com/channel/UCaIGh_a4LoEHXv5YujlZsiw" target="_blank"
                       >Подписаться <img src="/images/more.png" alt=""
                     /></a>
                   </div>
@@ -87,7 +87,7 @@ const App = () => {
                 <Col md={6} xl={3}>
                   <div className="socialBlock vk">
                     <img src="/images/vk.png" alt="" className="logo_social" />
-                    <a className="btn_link" href=""
+                    <a className="btn_link" href="https://vk.com/battlecraft" target="_blank"
                       >Подписаться <img src="/images/more.png" alt=""
                     /></a>
                   </div>
@@ -95,7 +95,7 @@ const App = () => {
                 <Col md={6} xl={3}>
                   <div className="socialBlock instagram">
                     <img src="/images/instagram.png" alt="" className="logo_social" />
-                    <a className="btn_link" href=""
+                    <a className="btn_link" href="https://www.instagram.com/battlecrafttop/" target="_blank"
                       >Подписаться <img src="/images/more.png" alt=""
                     /></a>
                   </div>

@@ -28,6 +28,7 @@ const Header = () => {
   const [servers, setServers] = useState([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalError, setModalError] = useState('');
+  const [tfa, setTfa] = useState(false);
 
   const handleLoginClose = () => { 
     setLoginModalVisible(false);
@@ -67,8 +68,12 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    setRegisterModalVisible(location.pathname === '/register' || registerModalVisible);
-    setLoginModalVisible(location.pathname === '/login' || loginModalVisible);
+    if (user.token && (location.pathname === '/register' || location.pathname === '/login')) {
+      history.push('/lk');
+    } else {
+      setRegisterModalVisible(location.pathname === '/register' || registerModalVisible);
+      setLoginModalVisible(location.pathname === '/login' || loginModalVisible);
+    }
   }, [location]);
 
   useEffect(async () => {
@@ -99,11 +104,21 @@ const Header = () => {
 
     setModalLoading(true);
 
+    const searchParams = new URLSearchParams(location.search);
+    const refCode = searchParams.get('ref');
+
     const formData = new FormData(e.target);
+
+    if (refCode) {
+      formData.append('ref_code', refCode);
+    }
+
     try {
       const { token } = await API.register(
         Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), { captchaToken })
       );
+
+      localStorage.setItem('token', token);
 
       dispatch(userSlice.actions.setData({ token }));
       setModalError('');
@@ -122,18 +137,40 @@ const Header = () => {
 
     const formData = new FormData(e.target);
     try {
-      const { token } = await API.login(
-        Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {})
-      );
+      if (tfa) {
+        const { token } = await API.loginWith2fa(
+          Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {})
+        );
 
-      if (rememberMe) {
-        localStorage.setItem('token', token);
+        if (rememberMe) {
+          localStorage.setItem('token', token);
+        }
+  
+        dispatch(userSlice.actions.setData({ token }));
+        setModalError('');
+        setLoginModalVisible(false);
+        history.push('/lk');
+      } else {
+        const { token, tfa: rTfa } = await API.login(
+          Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {})
+        );
+  
+        if (rTfa) {
+          setTfa(true);
+          setModalLoading(false);
+          
+          return;
+        }
+  
+        if (rememberMe) {
+          localStorage.setItem('token', token);
+        }
+  
+        dispatch(userSlice.actions.setData({ token }));
+        setModalError('');
+        setLoginModalVisible(false);
+        history.push('/lk');
       }
-
-      dispatch(userSlice.actions.setData({ token }));
-      setModalError('');
-      setLoginModalVisible(false);
-      history.push('/lk');
     } catch (e) {
       setModalError(e.response.data.message);
     }
@@ -247,6 +284,7 @@ const Header = () => {
         onSubmit={onLoginSubmit}
         loading={modalLoading}
         errorMessage={modalError}
+        tfa={tfa}
       />
       <RegisterModal
         visible={registerModalVisible}

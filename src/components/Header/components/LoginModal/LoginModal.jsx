@@ -14,6 +14,7 @@ const LoginModal = (props) => {
     onSubmit,
     loading,
     errorMessage,
+    tfa,
   } = props;
 
   const theme = useSelector(({ app }) => app.theme);
@@ -52,6 +53,13 @@ const LoginModal = (props) => {
               Нет аккаунта? <Link to="#" onClick={() => { onClose(); onClickRegister(); }}>Зарегистрироваться</Link>
             </Form.Text>
           </Form.Group>
+
+          {tfa && (
+            <Form.Group controlId="formBasic2fa">
+              <Form.Label>Код 2-х факторной аутентификации</Form.Label>
+              <Form.Control type="password" placeholder="Введите код" name="code" />
+            </Form.Group>
+          )}
 
           <button type="submit" className="btn_submit">
             Войти

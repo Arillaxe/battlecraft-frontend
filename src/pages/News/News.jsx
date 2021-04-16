@@ -22,7 +22,7 @@ const News = () => {
 
   return (
     <div className="news">
-      <img classnName="news-image" src={`${process.env.REACT_APP_SERVER_HOST}/images/${news.img_url || 'news_no_image.png'}`} alt="" />
+      <img className="news-image" src={`${process.env.REACT_APP_SERVER_HOST}/images/${news.img_url || 'news_no_image.png'}`} alt="" />
       <div className="news-head">
         <div className="news-title">{news.title}</div>
         <Link to="/">

@@ -1,9 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useDebugValue } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -24,8 +25,13 @@ const Lk = () => {
   const imageRef = useRef();
 
   const user = useSelector(({ user }) => user);
+  const theme = useSelector(({ app }) => app.theme);
+  const [refs, setRefs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+  const [current2fa, setCurrent2fa] = useState(user.tfaType);
+  const [showGoogleModal, setShowGoogleModal] = useState(false);
+  const [qrImage, setQrImage] = useState('');
 
   useEffect(() => {
     if (!user.token) {
@@ -40,7 +46,17 @@ const Lk = () => {
   
       createOrbitControls(skinViewer);
       skinViewer.animations.add(WalkingAnimation);
+
+      const fetchRefs = async () => {
+        const refs = await API.getRefs(user.token);
+
+        setRefs(refs);
+      };
+
+      fetchRefs();
     }
+
+    setCurrent2fa(user.tfaType);
   }, [user]);
 
   const changePassword = async (e) => {
@@ -66,25 +82,104 @@ const Lk = () => {
   const uploadSkin = async (file) => {
     setLoading(true);
 
-    console.log(File);
-
     const formData = new FormData();
     formData.append('skin', file);
     try {
       const { skin } = await API.uploadSkin(user.token, formData);
 
       dispatch(userSlice.actions.setData({ skin }));
-      NotificationManager.success('Пароль успешно изменен!');
+      NotificationManager.success('Скин успешно изменен!');
     } catch (e) {
+      console.log(e);
       NotificationManager.error(e.response.data.message);
     }
 
     setLoading(false);
   };
 
+  const change2fa = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+      const {
+        qrcode,
+        token,
+        user: rUser,
+      } = await API.change2fa(user.token, current2fa);
+
+      if (qrcode) {
+        setQrImage(qrcode);
+        setShowGoogleModal(true);
+      } else if (token) {
+        NotificationManager.success('2-х факторная аутентификации успешно отключена!');
+        dispatch(userSlice.actions.setData({ ...rUser, token }));
+      }
+
+      setPasswordError('');
+    } catch (e) {
+      console.log(e);
+      setPasswordError(e.response.data.message);
+    }
+
+    setLoading(false);
+  };
+
+  const confirm2fa = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    const formData = new FormData(e.target);
+    try {
+      const { token, user: rUser } = await API.confirm2fa(user.token, Array.from(formData.keys()).reduce((acc, key) => ({ ...acc, [key]: formData.get(key) }), {}));
+
+      dispatch(userSlice.actions.setData({ ...rUser, token }));
+
+      setPasswordError('');
+      setShowGoogleModal(false);
+      NotificationManager.success('Способ 2-х факторной аутентификации успешно изменен!');
+    } catch (e) {
+      setPasswordError(e.response.data.message);
+    }
+
+    setLoading(false);
+  }
+
+  const copyRefCode = async () => {
+    try {
+      navigator.clipboard.writeText(`http://localhost:3000/register?ref=${user.ref_code}`);
+
+      NotificationManager.success('Ссылка скопированна!');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div>
       <div className="content-lk">
+      <Modal show={showGoogleModal} onHide={() => setShowGoogleModal(false)} className={`login_modal${theme === 'dark' ? ' dark' : ''}`}>
+      <Modal.Header closeButton>
+        <Modal.Title>QR код для Google Authenticator</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="lk-qr-image">
+        <img src={qrImage} />
+        <Form onSubmit={confirm2fa}>
+          <Form.Group controlId="formBasic2faConfirm">
+            <Form.Label>Активация двухфакторной аунтентификации</Form.Label>
+            <Form.Control placeholder="Введите код 2-х факторной аутентификации" type="password" name="code" />
+            {passwordError && (
+              <div className="error-message">
+                {passwordError}
+              </div>
+            )}
+          </Form.Group>
+          <button>Подтвердить 2-х факторную аутентификацию</button>
+        </Form>
+      </Modal.Body>
+    </Modal>
         {loading && (
           <div className="spinner-wrapper">
             <Spinner animation="border" role="status" variant="light" />
@@ -114,11 +209,19 @@ const Lk = () => {
                 </div>
                 <div className="block">
                   <div className="title">Статистика ваших рефералов</div>
-                  <div className="text-danger">Вы еще не привели друга</div>
+                  {refs.length ? refs.map((ref, idx) => (
+                    <div key={`lk-ref-${idx}`} className="lk-ref-row">
+                      <div className="lk-ref-login">{ref.login}</div>
+                      <div className="lk-ref-earned">{ref.earned}</div>
+                    </div>
+                  )) : (
+                    <div className="text-danger">Вы еще не привели друга</div>
+                  )}
                 </div>
                 <div className="block">
-                  <div className="title">Ваш реферальный код</div>
-                  <div className="text-info">{user.ref_code}</div>
+                  <div className="title">Ваша реферальная ссылка</div>
+                  <div className="text-info">https://batlecraft.top/register?ref={user.ref_code}</div>
+                  <button className="btn_skin btn_ref" onClick={copyRefCode}>Скопировать</button>
                 </div>
               </Col>
             </Row>
@@ -185,7 +288,9 @@ const Lk = () => {
                         <option value="BattleCraft RPG">BattleCraft RPG</option>
                       </Form.Control>
                     </Form.Group>
-                    <button>Проголосовать</button>
+                    <div className="subBlock1">
+                      <button>Проголосовать</button>
+                    </div>
                   </Form>
                   <div className="subBlock">
                     <button>Рейтинг голосующих</button>
@@ -249,6 +354,27 @@ const Lk = () => {
                       )}
                     </Form.Group>
                     <button>Изменить пароль</button>
+                  </Form>
+                </div>
+              </Col>
+              <Col md="12">
+                <div className="block">
+                  <div className="title">Двухфакторная аунтентификация</div>
+                  <Form onSubmit={change2fa}>
+                    <Form.Group controlId="formBasic2fa">
+                      <Form.Label>Выберите способ двухфакторной аунтентификации</Form.Label>
+                      <Form.Control as="select" value={current2fa} name="2fa" onChange={(e) => setCurrent2fa(e.target.value)}>
+                        <option value="none">Отключена</option>
+                        <option value="google">Google Authenticator</option>
+                        <option value="email">Почта</option>
+                      </Form.Control>
+                      {passwordError && (
+                        <div className="error-message">
+                          {passwordError}
+                        </div>
+                      )}
+                    </Form.Group>
+                    <button>Изменить способ</button>
                   </Form>
                 </div>
               </Col>

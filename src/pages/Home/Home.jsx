@@ -1,24 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Col from 'react-bootstrap/Col';
+import Pagination from 'react-bootstrap/Pagination';
 import ReactMarkdown from 'react-markdown';
 import moment from 'moment';
 import API from '../../lib/api.js';
+import { appSlice } from '../../slices';
 import news_no_image from './news_no_image.png';
 import './home.sass';
 
 const Home = () => {
-  const [news, setNews] = useState([]);
+  const dispatch = useDispatch();
+
+  const news = useSelector(({ app }) => app.news);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [maxPages, setMaxPages] = useState(0);
 
   useEffect(() => {
     const fetchNews = async () => {
-      const news = await API.getNews(1);
+      const news = await API.getNews(currentPage);
 
-      setNews(news.data);
+      dispatch(appSlice.actions.setNews(news.data));
+
+      setMaxPages(news.page_count);
     };
 
     fetchNews();
-  }, []);
+  }, [currentPage]);
 
   return (
     <div>
@@ -59,6 +68,15 @@ const Home = () => {
           </div>
         );
       })}
+      {maxPages > 1 && (
+        <div className="news-pagination">
+          <Pagination size="lg">
+          {Array(maxPages).fill(0).map((_, idx) => (
+            <Pagination.Item onClick={() => setCurrentPage(idx + 1)} key={`home-pagination-${idx}`} active={idx + 1 === currentPage}>{idx + 1}</Pagination.Item>
+          ))}
+          </Pagination>
+        </div>
+      )}
       {news.length === 0 && (
         <div className="news_block aos-init aos-animate">
           <div className="content_news">

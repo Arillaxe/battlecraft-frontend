@@ -10,7 +10,7 @@ const Footer = () => (
       </Link>
       <div className="footer-categories">
         <div className="footer-category">
-          <div className="footer-title">Стоит ознокомится</div>
+          <div className="footer-title">Стоит ознокомиться</div>
             <ul>
               <li>
                 <a target="_blank" href="https://kodji.ru/start.html">Shambala Minecraft</a>
@@ -22,20 +22,6 @@ const Footer = () => (
                 <a target="_blank" href="http://minecraft.rekryt.ru/">Rekryt Project</a>
               </li>
             </ul>
-        </div>
-        <div className="footer-category">
-          <div className="footer-title">Соц. сети</div>
-          <ul>
-            <li>
-              <a href="#">ВКонтакте</a>
-            </li>
-            <li>
-              <a href="#">YouTube</a>
-            </li>
-            <li>
-              <a href="#">Twitch</a>
-            </li>
-          </ul>
         </div>
       </div>
     </Container>

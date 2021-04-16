@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import Form from 'react-bootstrap/Form';
-import Pagination from 'react-bootstrap/Pagination';
 import Spinner from 'react-bootstrap/Spinner';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -26,27 +22,28 @@ const Shop = () => {
   const [servers, setServers] = useState([]);
   const [currentServer, setCurrentServer] = useState({});
   const [currentType, setCurrentType] = useState(Object.keys(types)[0]);
-  const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [itemModalVisible, setItemModalVisible] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
 
   const fetchItems = async () => {
-    const items = await API.getShopItemsByServer(page, currentServer.id);
+    setLoading(true);
 
-    setItems(items.data);
-    setPages(items.page_count);
+    const items = await API.getShopItems(currentServer.id, currentType);
+
+    setItems(items);
+    setLoading(false);
   }
 
   useEffect(() => {
     const fetchServers = async () => {
+      setLoading(true);
+
       const servers = await API.getServers();
 
       setServers(servers);
       setCurrentServer(servers[0]);
-      fetchItems();
+      setLoading(false);
     };
 
     fetchServers();
@@ -54,7 +51,7 @@ const Shop = () => {
 
   useEffect(() => {
     fetchItems();
-  }, [currentServer]);
+  }, [currentServer, currentType]);
 
   const openItemModal = (id) => {
     const item = items.find(({ id: itemId }) => itemId === id);
@@ -71,6 +68,8 @@ const Shop = () => {
     }
 
     try {
+      setLoading(true);
+
       await API.buyItem(localStorage.getItem('token'), item.id);
 
       NotificationManager.success(`${item.title} успешно куплен`);
@@ -78,11 +77,18 @@ const Shop = () => {
       setItemModalVisible(false);
     } catch (e) {
       NotificationManager.error(e.response.data.message);
-    }    
+    }
+
+    setLoading(false);
   };
 
   return (
     <div className="shop">
+      {loading && (
+        <div className="spinner-wrapper">
+          <Spinner animation="border" role="status" variant="light" />
+        </div>
+      )}
       <h2>Донат</h2>
       <div className="shop-controls">
         <div className="shop-controls-title">Выберите сервер:</div>

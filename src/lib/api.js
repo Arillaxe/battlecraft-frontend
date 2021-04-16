@@ -17,6 +17,12 @@ class API {
     return data;
   }
 
+  async loginWith2fa(params) {
+    const { data } = await axios.post(`${this.baseURL}/auth/2fa`, params);
+
+    return data;
+  }
+
   async getUser(token) {
     const { data } = await axios.get(`${this.baseURL}/auth/user`, {
       headers: {
@@ -43,6 +49,12 @@ class API {
     return data;
   }
 
+  async getNewsSlider() {
+    const { data } = await axios.get(`${this.baseURL}/news/slider`);
+
+    return data;
+  }
+
   async getNewsById(id) {
     const { data } = await axios.get(`${this.baseURL}/news/${id}`);
 
@@ -55,8 +67,8 @@ class API {
     return data;
   }
 
-  async getShopItemsByServer(page, server) {
-    const { data } = await axios.get(`${this.baseURL}/shop?page=${page}&server=${server}`);
+  async getShopItems(serverId, type) {
+    const { data } = await axios.get(`${this.baseURL}/shop?server=${serverId}&type=${type}`);
 
     return data;
   }
@@ -92,6 +104,36 @@ class API {
 
   async updateToken(token) {
     const { data } = await axios.post(`${this.baseURL}/auth/updateToken`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return data;
+  }
+
+  async getRefs(token) {
+    const { data } = await axios.get(`${this.baseURL}/user/refs`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return data;
+  }
+
+  async change2fa(token, type) {
+    const { data } = await axios.get(`${this.baseURL}/user/2fa?type=${type}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return data;
+  }
+
+  async confirm2fa(token, params) {
+    const { data } = await axios.post(`${this.baseURL}/user/2fa/confirm`, params, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
